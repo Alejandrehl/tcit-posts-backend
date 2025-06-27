@@ -1,7 +1,7 @@
 # TCIT Posts Backend
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Alejandrehl/tcit_posts_backend/ci.yml?branch=main&label=build)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
-[![Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
+[![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
 [![Docker Image Size](https://img.shields.io/docker/image-size/library/node/20-slim?label=docker%20image)](https://hub.docker.com/_/node)
 
 Technical Challenge for TCIT - Senior Full Stack React/Node.js Engineer
