@@ -1,8 +1,8 @@
 {
   "name": "tcit-posts-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Technical Challenge for TCIT - Senior Full Stack ReactNode.js Engineer",
+  "author": "Alejandro Exequiel Hernández Lara",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
