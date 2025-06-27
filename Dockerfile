@@ -21,6 +21,9 @@ RUN ls -la dist/src/ && test -f dist/src/main.js
 FROM node:20-slim
 WORKDIR /app
 
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Copy package files
 COPY --from=builder /app/package*.json ./
 
@@ -40,8 +43,9 @@ USER appuser
 
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# Health check with longer timeout and interval
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
   CMD curl -f http://localhost:3000/health || exit 1
 
-CMD ["node", "dist/src/main.js"] 
+# Start command with delay to allow database to be ready
+CMD ["sh", "-c", "sleep 10 && node dist/src/main.js"] 
