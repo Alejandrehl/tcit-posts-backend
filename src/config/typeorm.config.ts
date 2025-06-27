@@ -8,7 +8,7 @@ export default registerAs('typeorm', (): TypeOrmModuleOptions => {
       url: process.env.DATABASE_URL,
       entities: [__dirname + '/../**/*.entity.{ts,js}'],
       migrations: [__dirname + '/../../migrations/*.{ts,js}'],
-      synchronize: false,
+      synchronize: process.env.NODE_ENV !== 'production',
       logging: true,
       ssl:
         process.env.NODE_ENV === 'production'
@@ -25,7 +25,7 @@ export default registerAs('typeorm', (): TypeOrmModuleOptions => {
     database: process.env.DATABASE_NAME,
     entities: [__dirname + '/../**/*.entity.{ts,js}'],
     migrations: [__dirname + '/../../migrations/*.{ts,js}'],
-    synchronize: false,
+    synchronize: process.env.NODE_ENV !== 'production',
     logging: true,
   };
 });

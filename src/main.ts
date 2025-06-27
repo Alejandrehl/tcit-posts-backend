@@ -16,6 +16,7 @@ async function bootstrap() {
       logger: true,
     }),
   );
+
   await app.register(helmet);
   await app.register(rateLimit, {
     max: 100,
