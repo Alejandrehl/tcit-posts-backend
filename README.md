@@ -15,7 +15,6 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 - [Quick Start](#quick-start)
 - [Local Development](#local-development)
 - [Health Check](#health-check)
-- [Railway Deployment](#railway-deployment)
 - [Docker Workflow](#docker-workflow)
 - [Environment Variables](#environment-variables)
 - [API Documentation](#api-documentation)
@@ -36,9 +35,9 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 - **Type Safety**: Strict TypeScript with comprehensive type definitions
 - **Security**: Global CORS, Helmet, rate limiting, input validation
 - **Documentation**: OpenAPI 3.1 docs with Swagger UI at `/docs`
-- **Health Check**: `/health` endpoint for Railway and monitoring
+- **Health Check**: `/health` endpoint for monitoring and health checks
 - **Testing**: 98% test coverage with unit and e2e tests
-- **CI/CD**: GitHub Actions with automated testing and deployment
+- **CI/CD**: GitHub Actions with automated testing
 - **Docker**: Multi-stage Dockerfile optimized for production
 - **API Versioning**: RESTful endpoints with `/v1` prefix
 - **Database**: PostgreSQL with TypeORM migrations
@@ -48,9 +47,9 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 ## Quick Start
 
 ### Prerequisites
-- **Node.js** 20.x or higher
-- **npm** or **yarn** package manager
-- **PostgreSQL** 14+ (for local development)
+- **Node.js** 20.x ([Download here](https://nodejs.org/en/download))
+- **npm** (comes with Node.js)
+- **PostgreSQL** 14+ ([Install for Mac](https://postgresapp.com/), [Linux](https://www.postgresql.org/download/linux/), [Windows](https://www.postgresql.org/download/windows/))
 - **Git**
 
 ### Local Development Setup
@@ -66,35 +65,36 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
    npm install
    ```
 
-3. **Environment configuration**
+3. **Configure environment variables**
+   Copy the example file and edit it with your local credentials:
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` with your local database credentials:
-   ```env
-   NODE_ENV=development
-   PORT=3000
-   DATABASE_HOST=localhost
-   DATABASE_PORT=5432
-   DATABASE_USER=postgres
-   DATABASE_PASSWORD=your_password
-   DATABASE_NAME=tcit_posts
-   ```
+   Edit `.env` and make sure to fill in all values, especially `DATABASE_USER` and `DATABASE_PASSWORD`.
 
-4. **Database setup**
+4. **Create the PostgreSQL user and database**
+   If you do not have a user or database, you can create them as follows (adjust user and password to match your .env):
    ```bash
-   # Create PostgreSQL database
-   createdb tcit_posts
-   # Run migrations
-   npm run migration:run -- -d data-source.ts
+   # Access the PostgreSQL console
+   psql -U postgres
+   # Inside psql:
+   CREATE USER postgres WITH PASSWORD 'your_password_here';
+   CREATE DATABASE tcit_posts OWNER postgres;
+   \q
+   ```
+   If you use a different user, update your .env accordingly.
+
+5. **Run database migrations**
+   ```bash
+   npm run migration:run
    ```
 
-5. **Start development server**
+6. **Start the development server**
    ```bash
    npm run start:dev
    ```
 
-6. **Verify installation**
+7. **Verify the installation**
    - API: http://localhost:3000
    - Documentation: http://localhost:3000/docs
    - Health check: http://localhost:3000/health
@@ -102,21 +102,34 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 
 ### Docker Setup (Alternative)
 
-1. **Start with Docker Compose**
+1. **Make sure you have Docker and Docker Compose installed**
+   - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+2. **Start the services**
    ```bash
    docker-compose up -d
    ```
 
-2. **Access the application**
+3. **Access the application**
    - API: http://localhost:3000
    - PostgreSQL: localhost:5432
 
-3. **Stop containers**
+4. **Stop the containers**
    ```bash
    docker-compose down
    ```
 
-> **Nota:** El archivo principal compilado es `dist/src/main.js`. Si cambias la estructura de carpetas, asegúrate de actualizar el Dockerfile, `package.json` y `railway.toml` para apuntar a la ruta correcta.
+> **Note:** If port 3000 or 5432 is already in use, stop the process using it or change the port in `.env` and in `docker-compose.yml`.
+
+---
+
+## Troubleshooting (Common Issues)
+
+- **Database connection error**: Make sure PostgreSQL is running and the credentials in `.env` are correct.
+- **Port 3000 already in use**: Stop the process using it (`lsof -i :3000` and then `kill <PID>`), or change the port in `.env`.
+- **`psql` command not found**: Make sure PostgreSQL is installed and the binary is in your PATH.
+- **Dependency issues**: Run `npm ci` to reinstall from scratch.
+- **Tests fail due to files in dist**: Run `find dist -name 'test-setup.*' -delete` and re-run the tests.
 
 ---
 
@@ -145,7 +158,7 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 
 - **Database operations**
   ```bash
-  npm run migration:run -- -d data-source.ts
+  npm run migration:run
   npm run migration:generate -- src/migrations/NewMigration
   ```
 
@@ -175,7 +188,7 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 ## Health Check
 
 - **Endpoint**: `GET /health`
-- **Purpose**: Used for Railway, Docker, and cloud monitoring
+- **Purpose**: Used for Docker and monitoring
 - **Response Example**:
   ```json
   {
@@ -213,55 +226,6 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 
 ---
 
-## Railway Deployment
-
-### Prerequisites
-- Railway account (https://railway.app)
-- GitHub repository connected to Railway
-
-### Deployment Steps
-
-1. **Connect Repository**
-   - Go to Railway Dashboard
-   - Click "New Project" → "Deploy from GitHub repo"
-   - Select your repository
-
-2. **Environment Variables**
-   Set the following environment variables in Railway:
-   ```env
-   NODE_ENV=production
-   PORT=3000
-   DATABASE_HOST=${DATABASE_HOST}
-   DATABASE_PORT=${DATABASE_PORT}
-   DATABASE_USER=${DATABASE_USER}
-   DATABASE_PASSWORD=${DATABASE_PASSWORD}
-   DATABASE_NAME=${DATABASE_NAME}
-   ```
-
-3. **Database Setup**
-   - Add PostgreSQL service in Railway
-   - Railway will automatically set DATABASE_* variables
-   - The app will run migrations automatically on startup
-
-4. **Deploy**
-   - Railway will automatically deploy on every push to main branch
-   - Monitor deployment logs in Railway dashboard
-
-5. **Custom Domain (Optional)**
-   - In Railway dashboard, go to your project
-   - Click "Settings" → "Domains"
-   - Add your custom domain
-
-### Railway-Specific Configuration
-
-The application is optimized for Railway deployment:
-- **Port**: Automatically uses `PORT` environment variable
-- **Database**: Compatible with Railway PostgreSQL
-- **Health Checks**: Built-in health endpoints
-- **Logging**: Structured logging for Railway monitoring
-
----
-
 ## Environment Variables
 
 | Variable | Description | Default | Required |
@@ -280,7 +244,6 @@ The application is optimized for Railway deployment:
 
 ### Base URL
 - **Local**: http://localhost:3000
-- **Production**: Your Railway domain
 
 ### Endpoints
 
@@ -352,26 +315,6 @@ src/
 │   └── ...
 └── ...
 ```
-
----
-
-## Troubleshooting / Testing
-
-### Problemas con archivos de test en dist
-
-Si ves errores de Jest sobre archivos `test-setup` en `dist`, ejecuta:
-
-```bash
-find dist -name 'test-setup.*' -delete
-```
-
-Y luego vuelve a correr los tests:
-
-```bash
-npm test
-```
-
-Esto puede ocurrir si el build copia archivos de setup de test a la carpeta de salida. Elimina esos archivos y asegúrate de que `.dockerignore` y `.gitignore` los excluyan.
 
 ---
 
@@ -453,7 +396,6 @@ npm run migration:revert
   1. Lint code
   2. Run tests with coverage
   3. Build application
-  4. Deploy to Railway (on main branch)
 
 ### Quality Gates
 - Code must pass linting
@@ -475,9 +417,6 @@ A: Modify the entity, generate a migration: `npm run migration:generate`, then r
 
 **Q: How do I access the API documentation?**
 A: Visit `/docs` endpoint when the server is running.
-
-**Q: How do I deploy to Railway?**
-A: Connect your GitHub repository to Railway and push to main branch. Railway will automatically deploy.
 
 ---
 

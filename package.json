@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage --runInBand --detectOpenHandles",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
+    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d data-source.ts",
     "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
     "prepare": "husky install"
   },
@@ -81,7 +81,8 @@
       "<rootDir>/src/posts/__tests__/test-setup.ts"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/src/posts/__tests__/test-setup.ts"
+      "<rootDir>/src/posts/__tests__/test-setup.ts",
+      "<rootDir>/dist/"
     ],
     "collectCoverageFrom": [
       "src/**/*.ts",
