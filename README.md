@@ -116,6 +116,8 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
    docker-compose down
    ```
 
+> **Nota:** El archivo principal compilado es `dist/src/main.js`. Si cambias la estructura de carpetas, asegúrate de actualizar el Dockerfile, `package.json` y `railway.toml` para apuntar a la ruta correcta.
+
 ---
 
 ## Local Development
@@ -350,6 +352,26 @@ src/
 │   └── ...
 └── ...
 ```
+
+---
+
+## Troubleshooting / Testing
+
+### Problemas con archivos de test en dist
+
+Si ves errores de Jest sobre archivos `test-setup` en `dist`, ejecuta:
+
+```bash
+find dist -name 'test-setup.*' -delete
+```
+
+Y luego vuelve a correr los tests:
+
+```bash
+npm test
+```
+
+Esto puede ocurrir si el build copia archivos de setup de test a la carpeta de salida. Elimina esos archivos y asegúrate de que `.dockerignore` y `.gitignore` los excluyan.
 
 ---
 
