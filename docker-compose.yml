@@ -36,7 +36,8 @@ services:
       - '3000:3000'
     volumes:
       - .:/app
-    command: ["npm", "run", "start:prod"]
+      - /app/node_modules
+    command: ["npm", "run", "start:dev"]
 
 volumes:
   db_data: 
