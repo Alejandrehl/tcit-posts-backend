@@ -21,4 +21,4 @@ export class PostsRepository {
   async findAllPosts(): Promise<Post[]> {
     return this.postRepository.find();
   }
-} 
+}

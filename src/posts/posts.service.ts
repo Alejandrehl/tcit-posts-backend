@@ -22,4 +22,4 @@ export class PostsService {
   async listPosts(): Promise<Post[]> {
     return this.postsRepository.findAllPosts();
   }
-} 
+}

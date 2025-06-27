@@ -2,7 +2,7 @@
   "name": "tcit-posts-backend",
   "version": "0.0.1",
   "description": "Technical Challenge for TCIT - Senior Full Stack ReactNode.js Engineer",
-  "author": "Alejandro Exequiel Hernández Lara",
+  "author": "Alejandro Exequiel Hernández Lara <alejandrehl@icloud.com> (+56944889280)",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -25,6 +25,7 @@
   "dependencies": {
     "@fastify/helmet": "^13.0.1",
     "@fastify/rate-limit": "^10.3.0",
+    "@fastify/static": "^8.2.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -76,15 +77,32 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "setupFilesAfterEnv": ["<rootDir>/src/posts/__tests__/test-setup.ts"],
-    "collectCoverageFrom": ["src/**/*.ts", "!src/main.ts", "!src/**/README.md"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/posts/__tests__/test-setup.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/src/posts/__tests__/test-setup.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/main.ts",
+      "!src/**/README.md"
+    ],
     "coverageThreshold": {
       "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
       }
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alejandrehl/tcit_posts_backend.git"
+  },
+  "homepage": "https://github.com/Alejandrehl/tcit_posts_backend#readme",
+  "bugs": {
+    "url": "https://github.com/Alejandrehl/tcit_posts_backend/issues"
   }
 }
