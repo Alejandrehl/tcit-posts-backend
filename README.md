@@ -1,7 +1,7 @@
 # TCIT Posts Backend
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Alejandrehl/tcit_posts_backend/ci.yml?branch=main&label=build)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
-[![Coverage](https://img.shields.io/badge/coverage-97%25-brightgreen)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
 [![Docker Image Size](https://img.shields.io/docker/image-size/library/node/20-slim?label=docker%20image)](https://hub.docker.com/_/node)
 
 Technical Challenge for TCIT - Senior Full Stack React/Node.js Engineer
@@ -14,6 +14,7 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Local Development](#local-development)
+- [Health Check](#health-check)
 - [Railway Deployment](#railway-deployment)
 - [Docker Workflow](#docker-workflow)
 - [Environment Variables](#environment-variables)
@@ -35,7 +36,8 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 - **Type Safety**: Strict TypeScript with comprehensive type definitions
 - **Security**: Global CORS, Helmet, rate limiting, input validation
 - **Documentation**: OpenAPI 3.1 docs with Swagger UI at `/docs`
-- **Testing**: 97% test coverage with unit and e2e tests
+- **Health Check**: `/health` endpoint for Railway and monitoring
+- **Testing**: 98% test coverage with unit and e2e tests
 - **CI/CD**: GitHub Actions with automated testing and deployment
 - **Docker**: Multi-stage Dockerfile optimized for production
 - **API Versioning**: RESTful endpoints with `/v1` prefix
@@ -68,7 +70,6 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
    ```bash
    cp .env.example .env
    ```
-   
    Edit `.env` with your local database credentials:
    ```env
    NODE_ENV=development
@@ -84,9 +85,8 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
    ```bash
    # Create PostgreSQL database
    createdb tcit_posts
-   
    # Run migrations
-   npm run migration:run
+   npm run migration:run -- -d data-source.ts
    ```
 
 5. **Start development server**
@@ -97,7 +97,8 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 6. **Verify installation**
    - API: http://localhost:3000
    - Documentation: http://localhost:3000/docs
-   - Health check: http://localhost:3000/v1/posts
+   - Health check: http://localhost:3000/health
+   - Posts: http://localhost:3000/v1/posts
 
 ### Docker Setup (Alternative)
 
@@ -121,61 +122,92 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 
 ### Development Workflow
 
-1. **Start development server**
-   ```bash
-   npm run start:dev
-   ```
-   The server will restart automatically on file changes.
+- **Start development server**
+  ```bash
+  npm run start:dev
+  ```
+  The server will restart automatically on file changes.
 
-2. **Run tests**
-   ```bash
-   # Run all tests
-   npm test
-   
-   # Run tests with coverage
-   npm run test:cov
-   
-   # Run tests in watch mode
-   npm run test:watch
-   ```
+- **Run tests**
+  ```bash
+  npm test
+  npm run test:cov
+  npm run test:watch
+  ```
 
-3. **Code quality**
-   ```bash
-   # Lint code
-   npm run lint
-   
-   # Format code
-   npm run format
-   ```
+- **Lint and format**
+  ```bash
+  npm run lint
+  npm run format
+  ```
 
-4. **Database operations**
-   ```bash
-   # Run migrations
-   npm run migration:run
-   
-   # Generate new migration
-   npm run migration:generate -- src/migrations/NewMigration
-   ```
+- **Database operations**
+  ```bash
+  npm run migration:run -- -d data-source.ts
+  npm run migration:generate -- src/migrations/NewMigration
+  ```
 
 ### API Testing
 
-1. **Using Swagger UI**
-   - Visit http://localhost:3000/docs
-   - Interactive API documentation and testing
+- **Swagger UI**: http://localhost:3000/docs
+- **Health Check**: http://localhost:3000/health
+- **Curl examples**:
+  ```bash
+  # Create a post
+  curl -X POST http://localhost:3000/v1/posts \
+    -H "Content-Type: application/json" \
+    -d '{"name": "My First Post", "description": "Post content"}'
 
-2. **Using curl**
-   ```bash
-   # Create a post
-   curl -X POST http://localhost:3000/v1/posts \
-     -H "Content-Type: application/json" \
-     -d '{"name": "My First Post", "description": "Post content"}'
-   
-   # List all posts
-   curl http://localhost:3000/v1/posts
-   
-   # Delete a post
-   curl -X DELETE http://localhost:3000/v1/posts/1
-   ```
+  # List all posts
+  curl http://localhost:3000/v1/posts
+
+  # Delete a post
+  curl -X DELETE http://localhost:3000/v1/posts/1
+
+  # Health check
+  curl http://localhost:3000/health
+  ```
+
+---
+
+## Health Check
+
+- **Endpoint**: `GET /health`
+- **Purpose**: Used for Railway, Docker, and cloud monitoring
+- **Response Example**:
+  ```json
+  {
+    "status": "ok",
+    "timestamp": "2025-06-27T19:42:19.382Z",
+    "uptime": 45.152403271,
+    "database": {
+      "status": "connected",
+      "responseTime": 12
+    },
+    "memory": {
+      "used": 39.31,
+      "total": 40.87,
+      "percentage": 96.18
+    }
+  }
+  ```
+- **Error Example**:
+  ```json
+  {
+    "status": "error",
+    "timestamp": "2025-06-27T19:42:19.382Z",
+    "uptime": 45.152403271,
+    "database": {
+      "status": "disconnected",
+      "error": "Connection timeout"
+    },
+    "memory": {
+      "used": 39.31,
+      "total": 40.87,
+      "percentage": 96.18
+    }
+  }
+  ```
 
 ---
 
@@ -287,7 +319,7 @@ curl -X DELETE /v1/posts/1
 ## Testing
 
 ### Test Coverage
-- **Current Coverage**: 97%
+- **Current Coverage**: 98%
 - **Target Coverage**: 80% (configurable)
 - **Test Types**: Unit tests, Integration tests, E2E tests
 
