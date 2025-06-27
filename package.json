@@ -100,10 +100,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Alejandrehl/tcit_posts_backend.git"
+    "url": "https://github.com/Alejandrehl/tcit-posts-backend.git"
   },
-  "homepage": "https://github.com/Alejandrehl/tcit_posts_backend#readme",
+  "homepage": "https://github.com/Alejandrehl/tcit-posts-backend#readme",
   "bugs": {
-    "url": "https://github.com/Alejandrehl/tcit_posts_backend/issues"
+    "url": "https://github.com/Alejandrehl/tcit-posts-backend/issues"
   }
 }

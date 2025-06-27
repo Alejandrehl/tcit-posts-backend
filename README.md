@@ -1,7 +1,7 @@
 # TCIT Posts Backend
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/Alejandrehl/tcit_posts_backend/ci.yml?branch=main&label=build)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
-[![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/Alejandrehl/tcit_posts_backend/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Alejandrehl/tcit-posts-backend/ci.yml?branch=main&label=build)](https://github.com/Alejandrehl/tcit-posts-backend/actions)
+[![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/Alejandrehl/tcit-posts-backend/actions)
 [![Docker Image Size](https://img.shields.io/docker/image-size/library/node/20-slim?label=docker%20image)](https://hub.docker.com/_/node)
 
 Technical Challenge for TCIT - Senior Full Stack React/Node.js Engineer
@@ -56,8 +56,8 @@ A robust REST API for managing blog posts built with NestJS, TypeScript, and Pos
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Alejandrehl/tcit_posts_backend.git
-   cd tcit_posts_backend
+   git clone https://github.com/Alejandrehl/tcit-posts-backend.git
+   cd tcit-posts-backend
    ```
 
 2. **Install dependencies**
