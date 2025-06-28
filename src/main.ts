@@ -22,7 +22,10 @@ async function bootstrap() {
   const frontendUrl = configService.get<string>('FRONTEND_URL');
   const port = configService.get<number>('PORT', 3000);
   const rateLimitMax = configService.get<number>('RATE_LIMIT_MAX', 100);
-  const rateLimitWindow = configService.get<string>('RATE_LIMIT_WINDOW', '1 minute');
+  const rateLimitWindow = configService.get<string>(
+    'RATE_LIMIT_WINDOW',
+    '1 minute',
+  );
 
   await app.register(helmet);
   await app.register(rateLimit, {
