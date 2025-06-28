@@ -12,4 +12,5 @@ export const validationSchema = Joi.object({
   DATABASE_NAME: Joi.string().required(),
   RATE_LIMIT_MAX: Joi.number().default(100),
   RATE_LIMIT_WINDOW: Joi.string().default('1 minute'),
+  FRONTEND_URL: Joi.string().default('http://localhost:5173'),
 });

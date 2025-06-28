@@ -8,6 +8,7 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -17,12 +18,21 @@ async function bootstrap() {
     }),
   );
 
+  const configService = app.get(ConfigService);
+  const frontendUrl = configService.get<string>('FRONTEND_URL');
+  const port = configService.get<number>('PORT', 3000);
+  const rateLimitMax = configService.get<number>('RATE_LIMIT_MAX', 100);
+  const rateLimitWindow = configService.get<string>('RATE_LIMIT_WINDOW', '1 minute');
+
   await app.register(helmet);
   await app.register(rateLimit, {
-    max: 100,
-    timeWindow: '1 minute',
+    max: rateLimitMax,
+    timeWindow: rateLimitWindow,
   });
-  app.enableCors();
+  app.enableCors({
+    origin: frontendUrl,
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -57,7 +67,7 @@ async function bootstrap() {
     customSiteTitle: 'Posts API Documentation',
     customCss: '.swagger-ui .topbar { display: none }',
   });
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap().catch((error) => {
